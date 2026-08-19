@@ -6,6 +6,8 @@ with 'Dist::Zilla::Role::FileMunger';
 
 use namespace::autoclean;
 
+our $VERSION = '0.001';
+
 =head1 SYNOPSIS
 
   ; in dist.ini — note that @Basic's License plugin has to go, it would
