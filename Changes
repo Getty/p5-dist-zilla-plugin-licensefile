@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-LicenseFile
 
-{{$NEXT}}
+0.001     2026-08-19 17:02:08Z
   - Initial release.
   - New plugin `[LicenseFile]`: on every build, compare the `LICENSE`
     gathered from the repository against the licence the distribution
