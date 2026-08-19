@@ -11,13 +11,17 @@ use Path::Tiny;
 
 =head1 DESCRIPTION
 
-Writes C<LICENSE> into the root of the repository, with the text
-L<Software::License> derives from the C<license>, C<copyright_holder> and
-C<copyright_year> settings in F<dist.ini>. Commit the result.
+Writes C<LICENSE> into the root of the repository, holding the text of the
+licence the distribution declares in F<dist.ini>. Commit the result — a licence
+only counts on GitHub, Gitea or Forgejo if it is a file they can see.
 
 This is the file L<Dist::Zilla::Plugin::LicenseFile> expects to find on every
-build, so run the command again whenever any of those settings change — the
+build, so run the command again whenever the C<license> setting changes — the
 plugin will tell you when that is.
+
+What lands in the file is the bare licence, without the copyright notice
+C<< ->fulltext >> would put above it; see
+L<Dist::Zilla::Plugin::LicenseFile/Why the bare licence text>.
 
 Writing the same text twice is a no-op, so the command is safe to run at any
 time, and safe to wire into a release process.
@@ -35,7 +39,7 @@ sub execute {
   my $plugin   = 'Dist::Zilla::Plugin::LicenseFile';
   my $filename = $plugin->filename;
 
-  my $wanted = $zilla->license->fulltext;
+  my $wanted = $plugin->wanted_text($zilla);
   my $file   = path($zilla->root)->child($filename);
 
   if ($file->exists && $plugin->comparable($file->slurp_utf8) eq $plugin->comparable($wanted)) {

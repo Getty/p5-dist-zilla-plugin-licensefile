@@ -11,9 +11,9 @@ committed `LICENSE` file, so a distribution built the default way shows up as
 unlicensed on its own project page.
 
 Committing the file fixes that, and introduces a quieter problem: nothing
-connects the committed text to the `license`, `copyright_holder` and
-`copyright_year` in `dist.ini` any more. Bump the year and the repository keeps
-shipping last year's licence, with no warning.
+connects the committed text to the `license` in `dist.ini` any more. Switch the
+licence and the repository keeps serving the old one, with no warning and no
+failing build.
 
 This distribution is both halves of the fix — a command that writes the file,
 and a plugin that refuses to build when it is missing or stale.
@@ -48,12 +48,21 @@ From here on `dzil build` compares the committed file against the distribution
 metadata and stops if they have drifted apart:
 
 ```
-[LicenseFile] LICENSE is out of date: it no longer matches the license,
-copyright_holder and copyright_year in dist.ini. Run 'dzil genlicense' and
-commit the file
+[LicenseFile] LICENSE is out of date: it no longer matches the license in
+dist.ini. Run 'dzil genlicense' and commit the file
 ```
 
 `dzil genlicense` is idempotent, so the fix is always the same two commands.
+
+### What ends up in the file
+
+The bare licence text — not `Software::License`'s `fulltext`, which is what
+`[License]` writes into the build. `fulltext` prefixes the licence with a
+copyright notice, and that prefix alone is enough to stop GitHub's detector:
+the same repository reports `NOASSERTION` with `fulltext` and `Artistic-2.0`
+with the bare text. Since detection is the whole point of committing the file,
+the bare text wins. The copyright notice still reaches the tarball via the
+`LICENSE AND COPYRIGHT` POD section, and the holder and year via `META.json`.
 
 ### Migrating an existing distribution
 

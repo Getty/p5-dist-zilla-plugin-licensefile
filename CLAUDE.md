@@ -32,8 +32,13 @@ t/20-genlicense.t                            # command behaviour, and the two to
 
 ## Conventions
 
-- **`filename` and `comparable` are class methods on the plugin, and the
-  command calls them.** Both halves must agree on what counts as the same
+- **The file holds `->license`, never `->fulltext`.** The copyright notice that
+  `fulltext` puts above the licence defeats GitHub's licence detection —
+  verified against the live API: `NOASSERTION` with `fulltext`, `Artistic-2.0`
+  with the bare text, same repository. Anyone "fixing" this back to `fulltext`
+  silently undoes the only reason the file is committed.
+- **`filename`, `wanted_text` and `comparable` are class methods on the plugin,
+  and the command calls them.** Both halves must agree on what counts as the same
   licence text — if they drift apart, a distribution can reach a state where
   `dzil genlicense` reports the file as current and the build still rejects it.
   Never inline that logic in the command.
@@ -51,9 +56,8 @@ t/20-genlicense.t                            # command behaviour, and the two to
 
 Tests use `Dist::Zilla::Tester` for the plugin and `Dist::Zilla::App::Tester`
 for the command, each building a throwaway dist in a tempdir. The expected
-licence text comes from `Software::License::Perl_5` with the same holder and
-year the test `dist.ini` declares — `copyright_year` is pinned there so the
-suite does not break at new year.
+licence text comes from `Software::License::Perl_5`, constructed the same way
+the test `dist.ini` declares it.
 
 ## When changing behavior
 

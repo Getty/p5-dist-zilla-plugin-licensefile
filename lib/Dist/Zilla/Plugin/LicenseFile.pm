@@ -31,18 +31,33 @@ default way shows up as unlicensed on its own project page.
 
 The fix is to commit the file and let C<GatherDir> pick it up like any other
 source file. That works, but it silently rots: nothing connects the committed
-text to the C<license>, C<copyright_holder> and C<copyright_year> settings in
-F<dist.ini> any more. Bump the year, switch the licence, and the repository
-keeps shipping last year's text.
+text to the C<license> setting in F<dist.ini> any more. Switch the licence and
+the repository keeps serving the old one, with no warning and no build failure.
 
 This plugin closes that gap. On every build it checks the C<LICENSE> that was
-gathered from the repository against the text L<Software::License> derives from
-the distribution's own metadata, and refuses to build when the file is missing
-or no longer matches. The companion command L<dzil genlicense|Dist::Zilla::App::Command::genlicense>
-writes the file the check expects.
+gathered from the repository against the licence the distribution declares, and
+refuses to build when the file is missing or no longer matches. The companion
+command L<dzil genlicense|Dist::Zilla::App::Command::genlicense> writes the file
+the check expects.
 
 The plugin never writes or modifies anything itself — the committed file is
 shipped verbatim, and a build either passes the check or stops.
+
+=head2 Why the bare licence text
+
+The file holds C<< $zilla->license->license >>, the licence on its own, and
+deliberately not C<< ->fulltext >>, which is what
+L<Dist::Zilla::Plugin::License> writes into the build. C<fulltext> prefixes the
+licence with a copyright notice for the current distribution, and that prefix
+is enough to stop GitHub's detector: a repository whose C<LICENSE> holds the
+C<fulltext> of the Artistic License 2.0 is reported as C<NOASSERTION> —
+GitHub links the file but names no licence. The same repository with the bare
+text is reported as C<Artistic-2.0>.
+
+Since detection is the entire reason to commit the file, the bare text wins.
+Nothing is lost: the copyright notice still reaches the tarball through the
+C<LICENSE AND COPYRIGHT> section L<Pod::Weaver> writes into the POD, and the
+holder and year still reach F<META.json>.
 
 =attr required
 
@@ -68,6 +83,12 @@ has required => (
 The name of the file, C<LICENSE>. A class method, so that
 L<Dist::Zilla::App::Command::genlicense> writes the file this plugin looks for.
 
+=method wanted_text
+
+The text the committed file is expected to hold, for a given L<Dist::Zilla>
+object. A class method shared with the command, see L</Why the bare licence
+text> for what it returns and why.
+
 =method comparable
 
 Normalises licence text for comparison, and is likewise a class method shared
@@ -81,6 +102,11 @@ rejects it.
 =cut
 
 sub filename { 'LICENSE' }
+
+sub wanted_text {
+  my ($self, $zilla) = @_;
+  return $zilla->license->license;
+}
 
 sub comparable {
   my ($self, $text) = @_;
@@ -100,17 +126,16 @@ sub munge_files {
     );
   }
 
-  my $wanted = $self->zilla->license->fulltext;
+  my $wanted = $self->wanted_text($self->zilla);
 
   unless ($self->comparable($file->content) eq $self->comparable($wanted)) {
     return $self->_complain(
-      "$filename is out of date: it no longer matches the license, "
-      . "copyright_holder and copyright_year in dist.ini. "
-      . "Run 'dzil genlicense' and commit the file"
+      "$filename is out of date: it no longer matches the license in "
+      . "dist.ini. Run 'dzil genlicense' and commit the file"
     );
   }
 
-  $self->log_debug("$filename matches the distribution metadata");
+  $self->log_debug("$filename matches the declared license");
 
   return;
 }

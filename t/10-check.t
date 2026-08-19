@@ -12,13 +12,13 @@ use Path::Tiny;
 use File::Temp qw(tempdir);
 use Software::License::Perl_5;
 
-# The text [LicenseFile] expects to find committed in the repository, for the
-# metadata the test dist.ini below declares.
+# The text [LicenseFile] expects to find committed in the repository: the bare
+# licence, without the copyright notice ->fulltext puts above it.
 sub wanted_license {
     Software::License::Perl_5->new({
         holder => 'Test',
         year   => 2026,
-    })->fulltext;
+    })->license;
 }
 
 sub build_dist {

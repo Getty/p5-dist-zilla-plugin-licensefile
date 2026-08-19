@@ -17,7 +17,7 @@ sub wanted_license {
     Software::License::Perl_5->new({
         holder => 'Test',
         year   => 2026,
-    })->fulltext;
+    })->license;
 }
 
 # A source tree for test_dzil() to copy. $with_plugin decides whether the dist
@@ -60,7 +60,7 @@ subtest 'writes LICENSE from the dist metadata' => sub {
     is($result->exit_code, 0, 'exit code 0')
         or diag $result->error // $result->output;
     like($result->output, qr/wrote LICENSE/, 'says it wrote the file');
-    is(written_license($result), wanted_license(), 'and the text is the license fulltext');
+    is(written_license($result), wanted_license(), 'and the text is the bare licence');
 };
 
 subtest 'is idempotent' => sub {
