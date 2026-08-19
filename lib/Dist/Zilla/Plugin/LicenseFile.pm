@@ -96,7 +96,7 @@ sub munge_files {
 
   unless ($file) {
     return $self->_complain(
-      "no $filename in the distribution — run 'dzil genlicense' and commit the file"
+      "no $filename in the distribution: run 'dzil genlicense' and commit the file"
     );
   }
 
@@ -104,7 +104,7 @@ sub munge_files {
 
   unless ($self->comparable($file->content) eq $self->comparable($wanted)) {
     return $self->_complain(
-      "$filename is out of date — it no longer matches the license, "
+      "$filename is out of date: it no longer matches the license, "
       . "copyright_holder and copyright_year in dist.ini. "
       . "Run 'dzil genlicense' and commit the file"
     );

@@ -48,7 +48,7 @@ From here on `dzil build` compares the committed file against the distribution
 metadata and stops if they have drifted apart:
 
 ```
-[LicenseFile] LICENSE is out of date — it no longer matches the license,
+[LicenseFile] LICENSE is out of date: it no longer matches the license,
 copyright_holder and copyright_year in dist.ini. Run 'dzil genlicense' and
 commit the file
 ```
