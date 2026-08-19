@@ -1,0 +1,59 @@
+package Dist::Zilla::App::Command::genlicense;
+# ABSTRACT: write the LICENSE file into the repository
+
+use Dist::Zilla::App -command;
+use Dist::Zilla::Plugin::LicenseFile;
+use Path::Tiny;
+
+=head1 SYNOPSIS
+
+  dzil genlicense
+
+=head1 DESCRIPTION
+
+Writes C<LICENSE> into the root of the repository, with the text
+L<Software::License> derives from the C<license>, C<copyright_holder> and
+C<copyright_year> settings in F<dist.ini>. Commit the result.
+
+This is the file L<Dist::Zilla::Plugin::LicenseFile> expects to find on every
+build, so run the command again whenever any of those settings change — the
+plugin will tell you when that is.
+
+Writing the same text twice is a no-op, so the command is safe to run at any
+time, and safe to wire into a release process.
+
+=cut
+
+sub abstract { 'write the LICENSE file into the repository' }
+
+sub opt_spec { }
+
+sub execute {
+  my ($self, $opt, $arg) = @_;
+
+  my $zilla    = $self->zilla;
+  my $plugin   = 'Dist::Zilla::Plugin::LicenseFile';
+  my $filename = $plugin->filename;
+
+  my $wanted = $zilla->license->fulltext;
+  my $file   = path($zilla->root)->child($filename);
+
+  if ($file->exists && $plugin->comparable($file->slurp_utf8) eq $plugin->comparable($wanted)) {
+    print "$filename is up to date\n";
+    return;
+  }
+
+  $file->spew_utf8($wanted);
+  print "wrote $filename\n";
+
+  return;
+}
+
+1;
+
+=head1 SEE ALSO
+
+=for :list
+* L<Dist::Zilla::Plugin::LicenseFile> — the build-time check this command satisfies
+
+=cut

@@ -1,0 +1,14 @@
+Revision history for Dist-Zilla-Plugin-LicenseFile
+
+{{$NEXT}}
+  - Initial release.
+  - New plugin `[LicenseFile]`: on every build, compare the `LICENSE`
+    gathered from the repository against the text derived from the
+    distribution's own `license`, `copyright_holder` and
+    `copyright_year`, and abort when the file is missing or no longer
+    matches. The `required = 0` attribute downgrades both checks to a
+    warning, for migrating an existing distribution.
+  - New command `dzil genlicense`: write that text into `LICENSE` in the
+    repository root, so the file can be committed and the hosting
+    platform can detect the licence. Idempotent — writing the same text
+    twice reports `LICENSE is up to date` and touches nothing.
