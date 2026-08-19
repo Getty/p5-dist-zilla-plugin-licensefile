@@ -5,7 +5,7 @@ use Dist::Zilla::App -command;
 use Dist::Zilla::Plugin::LicenseFile;
 use Path::Tiny;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 SYNOPSIS
 
