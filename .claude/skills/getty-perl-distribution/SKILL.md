@@ -13,26 +13,29 @@ Create or polish a Perl distribution matching Getty's workspace conventions.
 
 | What | Resolution order |
 |---|---|
-| `dist`      | dash-form (`WWW-Foo`) — from user arg or from dir name under `~/dev/perl/p5-*` |
+| `dist`      | dash-form (`WWW-Foo`) — from user arg or from the checkout dir name (`p5-www-foo` → `WWW-Foo`) |
 | `module`    | colon-form (`WWW::Foo`) — derived from `dist` by `s/-/::/g` |
 | `abstract`  | one-line `# ABSTRACT:` from the first non-empty existing `lib/**/*.pm`, else ask |
 | `author`    | `Torsten Raudssus <getty@cpan.org>` |
 | `copyright_holder` | `Torsten Raudssus <torsten@raudssus.de> L<https://raudssus.de/>` |
 | `copyright_year`   | current year |
 | `license`   | `Perl_5` |
-| `irc`       | search sibling `~/dev/perl/p5-*/dist.ini` for an existing `irc =` line in the same topic cluster; if none found, ask the user (never make one up) |
+| `irc`       | search sibling `p5-*` checkouts' `dist.ini` for an existing `irc =` line in the same topic cluster; if none found, ask the user (never make one up) |
 
 ## Sibling reference
 
 Before writing, read **one** existing sibling dist that is closest in topic
-(e.g. for `p5-www-openbao` look at `~/dev/perl/p5-www-firecrawl/` because both
-are HTTP-client WWW-* packages). Match its layout exactly:
+(e.g. for a new `WWW-*` HTTP client, read an existing `WWW-*` client dist —
+same shape, same layout). Match its layout exactly:
 
 - `dist.ini`
 - `cpanfile` (split `on test` / `on develop` if the sibling does)
 - `Changes` (`{{$NEXT}}` marker + one `0.001` entry with a bullet list)
 - `README.md` (Synopsis → Description → one example per public method → License)
 - `.gitignore` (copy sibling's, substituting the dist name in the build-dir ignore line)
+- `LICENSE` — **not** copied from the sibling: generated with `dzil genlicense`
+  and committed (see *After writing*). Most existing dists predate the check and
+  have no LICENSE at all, so the sibling is not a guide here
 - `t/00-load.t` using `Test::LoadAllModules` OR `use_ok` — match what the sibling uses
 - Any additional `t/NN-*.t` the author convention calls for (often `10-*`, `20-*` topical tests)
 - `.github/workflows/ci.yml` — copy the sibling's if it has one, else the
@@ -40,6 +43,47 @@ are HTTP-client WWW-* packages). Match its layout exactly:
 
 Do NOT diverge from the sibling's style even if it feels outdated. Workspace
 consistency beats "modern best practice."
+
+## Test file conventions
+
+- **Every `.t` opens with a shebang:** `#!/usr/bin/env perl`, then `use strict; use warnings; use Test::More;`
+- **Close with `done_testing;`** — never `plan tests => N`.
+- **Ship a load test** that `use_ok`s every module of the distribution, either via `Test::LoadAllModules` or an explicit `qw( ... )` list — match the sibling.
+
+```perl
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use Test::More;
+
+for (qw(
+  WWW::Foo
+  WWW::Foo::Client
+)) {
+  use_ok($_);
+}
+
+done_testing;
+```
+
+## dist.ini header
+
+Open every `dist.ini` with the metadata block, aligned on `=`:
+
+```
+name    = WWW-Foo
+author  = Torsten Raudssus <getty@cpan.org>
+license = Perl_5
+copyright_holder = Torsten Raudssus <torsten@raudssus.de> L<https://raudssus.de/>
+copyright_year   = 2026
+```
+
+`author` carries the **cpan.org** address — that is what links the release to
+the PAUSE account across the CPAN subsystems. `copyright_holder` carries the
+everyday address plus the homepage link. Never swap the two.
+
+Then the plugin bundle. For Getty's own CPAN work that is `[@Author::GETTY]` —
+its options are documented in `getty-perl-release-author-getty`.
 
 ## CI workflow
 
@@ -60,7 +104,7 @@ The action runs `dzil authordeps` + `dzil listdeps --author` + `dzil test`. The
 - Pure-Perl dist: use the fallback template `templates/github-ci.yml` as-is.
 - Alien / XS dist: add the `apt-get`/`brew` system-library step(s) before the
   action, and a `share-build` job passing `install-type: share`. Copy the
-  layout from `~/dev/perl/p5-alien-libgit2/.github/workflows/`.
+  layout from an existing Alien dist of the same shape.
 
 ## Templates
 
@@ -83,7 +127,16 @@ equivalent. Rename `lib_Module.pm` → `lib/<Path>/<Name>.pm`,
 
 ## After writing
 
-Run `dzil test` inside the dist directory and surface the output. Do NOT
+Write the licence file and track it. `[@Author::GETTY]` aborts the build without
+a committed `LICENSE`, and the `git add` is not optional — the bundle gathers
+through `Git::GatherDir`, which only sees tracked files:
+
+```bash
+dzil genlicense
+git add LICENSE
+```
+
+Then run `dzil test` inside the dist directory and surface the output. Do NOT
 `dzil release` unless the user explicitly asks.
 
 ## Related
