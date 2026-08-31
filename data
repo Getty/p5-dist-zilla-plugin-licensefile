@@ -1,0 +1,14 @@
+---
+class: standard
+created: 2026-08-31T04:44:59Z
+id: 1
+priority: medium
+status: backlog
+tags:
+- testing
+- docs
+title: 'Regression test: README failure message stays in sync with the code'
+updated: 2026-08-31T04:44:59Z
+---
+
+README.md quotes the plugin's out-of-date failure message verbatim, and the two are kept in sync by hand. Add a test that asserts the message string emitted by munge_files matches what README.md quotes, so a wording change to one without the other fails the build instead of silently drifting.
