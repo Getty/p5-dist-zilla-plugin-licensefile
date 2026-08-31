@@ -1,0 +1,2 @@
+claude: true
+prompt: "Pick up actionable tickets from this repo's karr board for Dist::Zilla::Plugin::LicenseFile. Delegate behaviour-relevant work to dist-zilla-plugin-licensefile-worker per .claude/rules/. Never run dzil release."
