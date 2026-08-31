@@ -1,0 +1,14 @@
+---
+class: standard
+created: 2026-08-31T04:45:03Z
+id: 2
+priority: medium
+status: backlog
+tags:
+- coordination
+- release
+title: Verify @Author::GETTY bundle still wires [LicenseFile] after 0.002
+updated: 2026-08-31T04:45:03Z
+---
+
+@Author::GETTY in ../p5-dist-zilla-pluginbundle-author-getty loads this plugin and removes @Basic's License. Confirm that still holds after the 0.002 attribute/method surface, and that a bundle-built dist passes the LicenseFile check. Cross-repo: if the bundle needs a change, file it on that repo's board.
