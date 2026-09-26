@@ -2,7 +2,6 @@
 name: dist-zilla-plugin-licensefile-worker
 description: "Default Dist-Zilla-Plugin-LicenseFile worker — the plugin itself: the [LicenseFile] FileMunger check, the dzil genlicense command, the shared filename/wanted_text/comparable class methods, the required attribute, POD, cpanfile and dist plumbing. Use for implementation, refactoring, debugging and tests in this distribution. Leaves a commit-ready tree; never commits — commits belong to dist-zilla-plugin-licensefile-release-manager."
 model: inherit
-allowed-tools: Read, Edit, Write, Bash, Glob, Grep
 briefing:
   skills:
     - dist-zilla-plugin-licensefile-core
