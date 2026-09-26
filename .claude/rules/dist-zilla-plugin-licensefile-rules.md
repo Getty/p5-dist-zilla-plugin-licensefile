@@ -32,7 +32,7 @@ This rule depends on whether the Agent/Task tool is available to you.
 
 - **You can spawn subagents** (orchestrating main agent): Do NOT touch behavior-relevant
   code yourself — delegate. Your lane: coordinate, inspect, plan, review diffs, run
-  tests, manage git, edit non-behavioral docs. When in doubt, delegate. Why: only the
+  tests, edit non-behavioral docs. When in doubt, delegate. Why: only the
   `dist-zilla-plugin-licensefile-*` agents get their skills force-loaded via
   `briefing.skills`; you get no briefing and would touch internals with too little
   context.
@@ -40,7 +40,7 @@ This rule depends on whether the Agent/Task tool is available to you.
   | Task | Agent |
   |---|---|
   | Implement / refactor / debug the plugin, the command, cpanfile | `dist-zilla-plugin-licensefile-worker` (default) |
-  | Pre-release audit | `dist-zilla-plugin-licensefile-release-checker` |
+  | Commits, `Changes`, card → done, pre-release audit | `dist-zilla-plugin-licensefile-release-manager` |
 
 - **You cannot spawn subagents** (you ARE a `dist-zilla-plugin-licensefile-*` agent): the
   delegation lock does not apply to you — implement, refactor, debug and test per these
@@ -53,11 +53,11 @@ attribute, `cpanfile`, and tests. Pure prose docs and `Changes` notes are not.
 ## Coordination — karr board (always in scope)
 
 Ticket coordination is the orchestrating agent's job, so `karr` is always in scope —
-don't invoke the `kanban-issues-karr-cli` skill first, just use it. Git-native kanban;
+don't invoke the `kanban-issues-karr-coordination` skill first, just use it. Git-native kanban;
 state lives in `refs/karr/*`; one board, this repo. Day-to-day: `karr list --compact` /
 `karr board` for open work; `karr show ID` for detail; `karr create/edit/move/handoff`
 for the usual flow; mutating commands auto-sync. Full surface: skill
-`kanban-issues-karr-cli`.
+`kanban-issues-karr-coordination`.
 
 Cross-repo work is a ticket on the *other* repo's board (`cd
 ../p5-dist-zilla-pluginbundle-author-getty && karr create …`), never a direct edit there.
@@ -98,6 +98,6 @@ stop and ask.
 Module loading, `$VERSION`, cpanfile pinning and house style: skills `getty-perl-core`,
 `getty-perl-moose` (the plugin class), `getty-perl-distribution`. `[@Author::GETTY]`, POD
 weaving, `{{$NEXT}}`: skill `getty-perl-release-author-getty`. dist.ini mechanics:
-`perl-release-dist-ini`. Commit messages: `getty-git-commit-style`. Architecture and the
+`perl-release-dist-ini`. Commits: only `dist-zilla-plugin-licensefile-release-manager` commits (it carries `getty-git-commit-style`). Architecture and the
 shared-contract invariants: `dist-zilla-plugin-licensefile-core`. Don't duplicate any of
 it here.

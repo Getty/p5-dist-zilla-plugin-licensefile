@@ -12,7 +12,7 @@ principle and lane are in `.claude/rules/dist-zilla-plugin-licensefile-rules.md`
 | Task | Agent |
 |---|---|
 | Implement / refactor / debug the plugin, the command, cpanfile | `dist-zilla-plugin-licensefile-worker` (default) |
-| Pre-release audit | `dist-zilla-plugin-licensefile-release-checker` |
+| Commits, `Changes`, card → done, pre-release audit | `dist-zilla-plugin-licensefile-release-manager` |
 
 The agents carry their conventions via `briefing.skills` (see `.claude/agents/`); the
 main agent delegates rather than loading them. Architecture, the fulltext-vs-license
