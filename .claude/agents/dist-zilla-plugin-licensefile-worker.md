@@ -7,7 +7,6 @@ briefing:
     - dist-zilla-plugin-licensefile-core
     - getty-perl-core
     - getty-perl-moose
-    - getty-perl-distribution
     - kanban-issues-karr-ticket
     - getty-perl-pod
 ---

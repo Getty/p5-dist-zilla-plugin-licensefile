@@ -8,7 +8,6 @@ briefing:
     - dist-zilla-plugin-licensefile-core
     - getty-perl-release-author-getty
     - perl-release-dist-ini
-    - getty-perl-distribution
     - kanban-issues-karr-ticket
 ---
 

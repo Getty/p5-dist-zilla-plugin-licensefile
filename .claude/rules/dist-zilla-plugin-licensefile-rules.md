@@ -96,7 +96,7 @@ stop and ask.
 ## Perl specifics — reference, don't restate
 
 Module loading, `$VERSION`, cpanfile pinning and house style: skills `getty-perl-core`,
-`getty-perl-moose` (the plugin class), `getty-perl-distribution`. `[@Author::GETTY]`, POD
+`getty-perl-moose` (the plugin class). `[@Author::GETTY]`, POD
 weaving, `{{$NEXT}}`: skill `getty-perl-release-author-getty`. dist.ini mechanics:
 `perl-release-dist-ini`. Commits: only `dist-zilla-plugin-licensefile-release-manager` commits (it carries `getty-git-commit-style`). Architecture and the
 shared-contract invariants: `dist-zilla-plugin-licensefile-core`. Don't duplicate any of
