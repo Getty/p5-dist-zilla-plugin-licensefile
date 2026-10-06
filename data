@@ -1,0 +1,33 @@
+---
+class: standard
+created: 2026-10-06T19:41:51Z
+id: 3
+priority: medium
+status: backlog
+tags:
+- bug
+- license
+- docs
+- review-2026-10-06
+title: 'Dist without copyright_year fails its build every New Year: the checked text
+  embeds the year'
+updated: 2026-10-06T19:41:51Z
+---
+
+`wanted_text` returns `$zilla->license->license` (`lib/Dist/Zilla/Plugin/LicenseFile.pm:108-111`), described in the POD as "the licence on its own" without the copyright notice (`:50-62`). For `Perl_5`, the licence nearly the whole fleet uses, that text still contains the notice twice:
+
+    perl -MSoftware::License::Perl_5 -e 'my $l=Software::License::Perl_5->new({holder=>"H",year=>"YYYY"});
+      print scalar(() = $l->license =~ /YYYY/g), "\n"'      # 2  ("This software is Copyright (c) YYYY by H.")
+
+So the committed LICENSE depends on `copyright_year` and `copyright_holder`, and `munge_files` (`:131-138`) aborts when either changes. Two consequences the POD does not mention:
+
+1. A dist.ini without `copyright_year` gets the current year from Dist::Zilla. Its LICENSE goes "out of date" at midnight on 1 January and every build aborts until someone runs `dzil genlicense` and commits. In the fleet that is p5-mcp-arcraiders today (no `copyright_year`, LICENSE committed); everyone else sets the year explicitly.
+2. The message says "it no longer matches the license in dist.ini" (`:135-136`). When only the year or the holder string moved, that points the reader at the wrong line.
+
+Done when:
+- the POD section "Why the bare licence text" says that holder and year are part of the compared text for licences that embed them;
+- the failure message names what differs (at least: licence name vs. copyright line), or the comparison leaves the copyright line out;
+- a test covers a dist without `copyright_year` (decide: warn that the year floats, or tolerate it).
+
+---
+Fleet review 2026-10-06 · kind: bug · confidence: verified
