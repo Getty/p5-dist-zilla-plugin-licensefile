@@ -78,6 +78,14 @@ otherwise the migration never finishes. The `_complain` helper is the single poi
 that chooses `log_fatal` vs `log`; both messages are identical and both name the
 fix (`run 'dzil genlicense' and commit the file`).
 
+## Bootstrap: the plugin runs against itself
+
+`dist.ini` declares `[Bootstrap::lib]` — deliberately. This distribution *runs* the
+plugin it defines, so the plugin has to load from `lib/`, not from whatever version
+happens to be installed in the environment. Without the bootstrap, a green `dzil
+build` would exercise an installed release of the plugin instead of the code in
+this tree — the check would validate itself with a stale implementation.
+
 ## Testing
 
 - `t/00-load.t` — every module compiles.
