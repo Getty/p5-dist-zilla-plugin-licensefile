@@ -1,0 +1,22 @@
+---
+claimed_at: 2026-10-25T01:43:53Z
+claimed_by: offen-2610
+class: standard
+completed: 2026-10-25T01:43:53Z
+created: 2026-08-31T04:44:59Z
+id: 1
+priority: medium
+started: 2026-10-25T01:38:40Z
+status: done
+tags:
+- testing
+- docs
+title: 'Regression test: README failure message stays in sync with the code'
+updated: 2026-10-25T01:43:53Z
+---
+
+README.md quotes the plugin's out-of-date failure message verbatim, and the two are kept in sync by hand. Add a test that asserts the message string emitted by munge_files matches what README.md quotes, so a wording change to one without the other fails the build instead of silently drifting.
+
+2026-10-25 01:42 Done in ffc1de8 (branch offen-2610). t/30-readme.t builds a dist with a stale LICENSE and compares the emitted message with README's quoted block. Rot-probe: 'out of date' -> 'stale' in lib fails test 4. Also found: t/30 covers only the generic message, not the new copyright-line variant of k3; p5-mcp-arcraiders has no copyright_year (named on k3, not touched).
+
+2026-10-25 01:42 ffc1de8; suite 19 tests green offline
