@@ -7,7 +7,8 @@ writes, the command never checks at build time.
 ## Delegation
 
 Delegate behavior-relevant code to the right agent instead of touching it yourself —
-principle and lane are in `.claude/rules/dist-zilla-plugin-licensefile-rules.md`.
+the principle is a shared house rule (skilletor bundle `getty-cpan-dist@getty`); the lane is
+in `.claude/rules/dist-zilla-plugin-licensefile-rules.md`.
 
 | Task | Agent |
 |---|---|
