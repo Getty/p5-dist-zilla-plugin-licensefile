@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-LicenseFile
 
-{{$NEXT}}
+0.002     2026-10-25 18:16:38Z
   - When only the copyright line of LICENSE differs from copyright_holder
     and copyright_year, the failure says so and shows both lines, instead
     of pointing at the license setting.
