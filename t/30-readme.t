@@ -1,11 +1,18 @@
 use strict;
 use warnings;
 use Test::More;
+use FindBin qw($Bin);
+
+# README.md lives in the repository only; the built dist ships a README
+# generated from POD instead.
+my $readme_md = "$Bin/../README.md";
 
 BEGIN {
     plan skip_all => "Dist::Zilla::Tester not installed"
         unless eval { require Dist::Zilla::Tester; 1 };
 }
+plan skip_all => "README.md is not part of the built distribution"
+    unless -f $readme_md;
 
 use Dist::Zilla::Tester;
 use Path::Tiny;
@@ -49,7 +56,7 @@ ok($error, 'a stale LICENSE aborts the build');
 my ($message) = squash("$error") =~ m{(\[LicenseFile\] .*?commit the file)};
 ok($message, 'the failure carries the [LicenseFile] message') or diag $error;
 
-my $readme = path('README.md')->slurp_utf8;
+my $readme = path($readme_md)->slurp_utf8;
 my ($quote) = $readme =~ m{^```\n(\[LicenseFile\] .*?)\n```}ms;
 ok($quote, 'README.md quotes a [LicenseFile] failure') or diag $readme;
 
