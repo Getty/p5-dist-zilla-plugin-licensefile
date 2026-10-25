@@ -52,6 +52,12 @@ metadata and stops if they have drifted apart:
 dist.ini. Run 'dzil genlicense' and commit the file
 ```
 
+When only the copyright line differs (`copyright_holder` or `copyright_year`
+changed, which matters for licences such as Perl 5 that embed it), the message
+says so and shows both lines. Without `copyright_year` in `dist.ini` the year
+follows the clock, so the build warns about it: the file would go out of date
+on 1 January.
+
 `dzil genlicense` is idempotent, so the fix is always the same two commands.
 
 ### What ends up in the file
