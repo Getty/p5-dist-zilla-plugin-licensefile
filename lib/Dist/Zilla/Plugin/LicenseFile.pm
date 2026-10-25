@@ -7,7 +7,7 @@ with 'Dist::Zilla::Role::FileMunger';
 use Path::Tiny;
 use namespace::autoclean;
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 =head1 SYNOPSIS
 
