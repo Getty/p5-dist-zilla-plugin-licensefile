@@ -1,0 +1,22 @@
+---
+claimed_at: 2026-10-25T01:43:57Z
+claimed_by: offen-2610
+class: standard
+completed: 2026-10-25T01:43:57Z
+created: 2026-08-31T04:45:03Z
+id: 2
+priority: medium
+started: 2026-10-25T01:38:44Z
+status: done
+tags:
+- coordination
+- release
+title: Verify @Author::GETTY bundle still wires [LicenseFile] after 0.002
+updated: 2026-10-25T01:43:57Z
+---
+
+@Author::GETTY in ../p5-dist-zilla-pluginbundle-author-getty loads this plugin and removes @Basic's License. Confirm that still holds after the 0.002 attribute/method surface, and that a bundle-built dist passes the LicenseFile check. Cross-repo: if the bundle needs a change, file it on that repo's board.
+
+2026-10-25 01:42 Verified, no bundle change needed. GETTY.pm:1167 removes License unless generate_license; :1173 add_plugins('LicenseFile') without attributes (0.002 surface untouched) unless generate_license||no_license. Bundle t/license_file.t passes (13 tests) against this worktree's lib. Not done: a full build of a dist through @Author::GETTY itself (needs git/network plugins); the check itself is covered by t/10. No code change, no commit.
+
+2026-10-25 01:42 verified, no change needed
