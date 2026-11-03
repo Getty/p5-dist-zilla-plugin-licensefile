@@ -1,17 +1,17 @@
 requires 'Dist::Zilla', '6.037';
-requires 'Dist::Zilla::Role::FileMunger';
 requires 'Dist::Zilla::App';
+requires 'Dist::Zilla::Role::FileMunger';
 requires 'Moose';
 requires 'Path::Tiny';
 
 on test => sub {
-    requires 'Test::More';
-    requires 'Test::DZil';
-    requires 'Dist::Zilla::Tester';
     requires 'Dist::Zilla::App::Tester';
-    requires 'Path::Tiny';
-    requires 'File::Temp';
+    requires 'Dist::Zilla::Tester';
     requires 'File::Find::Rule';
+    requires 'File::Temp';
+    requires 'Path::Tiny';
+    requires 'Test::DZil';
+    requires 'Test::More';
 };
 
 on develop => sub {
